@@ -7,9 +7,11 @@
 # 2022-09-26  v0.1  axel hahn  first lines
 # 2022-10-14  v0.2  axel hahn  add param support; show a help
 # 2023-08-21  v0.3  axel hahn  finish option "-s"; add option "-p" 
+# 2024-03-28  v0.4  axel hahn  add option -r
+# 2024-10-19  v0.5  axel hahn  add urls to source and docs
 # ======================================================================
 
-APPVERSION=0.3
+APPVERSION=0.5
 
 PARSED_SCRIPT=
 PARSED_FUNCTION=
@@ -17,6 +19,7 @@ PARSED_LINE=
 PARSED_DOC=
 
 SHOWPRIVATE=0
+REPOURL=
 
 # ----------------------------------------------------------------------
 # INTERNAL FUNCTIONS
@@ -28,7 +31,7 @@ SHOWPRIVATE=0
 _setH(){
     typeset -i iHStart=$1
     local sTmp; sTmp=$( seq 1 ${iHStart} )
-    PREFIX_SCRIPT=$( printf -- '#%.0s' "$sTmp" )
+    PREFIX_SCRIPT=$( printf -- '#%.0s' $sTmp ) # do not quote $sTmp
     PREFIX_FUNCTION="${PREFIX_SCRIPT}#"
 }
 
@@ -71,7 +74,7 @@ getFunctions(){
 # get markdown header for 
 # return string
 getHeader(){
-    echo "${PREFIX_SCRIPT} ${PARSED_SCRIPT}"
+    echo "${PREFIX_SCRIPT} $( basename "${PARSED_SCRIPT}" )"
     echo
 }
 
@@ -87,14 +90,13 @@ getHeader(){
 parseFunction(){
     local _script="${1}"
     local fktline="${2}"
-    typeset -i local _linestart
-    typeset -i local _iLine
+    local _linestart; typeset -i _linestart
+    local _iLine;     typeset -i _iLine
     local _doc
 
         _linestart=$( echo "$fktline" | cut -f 1 -d ':' )
         fktname=$( echo "$fktline" | cut -f 2 -d ':' )
 
-        
         _iLine=$_linestart-1
         
         _doc=$(
@@ -117,23 +119,60 @@ parseFunction(){
         
 }
 
-# show help for a given script
-function getbashdoc() {
+# parse the doc block of a given function
+# global vars: $PARSED_DOC  string  doc block of the function
+parseDocBlock(){
+    local _icon;
+    test -n "$PARSED_DOC" && (
+        # echo -n "<html><pre><code class=\"language-txt bashdoc\">"
+        echo '```txt'
+        echo "$PARSED_DOC"| grep -v -- "-----" | cut -c 3- | while read -r line
+        do
+            # echo "$line"
+            _icon=""
+            if grep -qi "^param[[:space:]]" <<< "$line"; then
+                _icon="🟩 "
+                local _descr;
+                _descr=$( awk '{$1=$2=""; print $0 }' <<< "$line" | sed "s#^[[:space:]]*##" )
+                grep -qi "optional:" <<< "$_descr" && _icon="🔹 "
+            fi
+            
+            grep -qi "^global[[:space:]]" <<< "$line" && _icon="🌐 "
+            grep -qi "^see " <<< "$line" && _icon="👉🏼 "
 
+            echo "${_icon}${line}"
+        done
+        # echo "</code></pre></html>"
+        echo '```'
+        echo
+    )
+    # test -n "$PARSED_DOC" && (
+    #     echo "\`\`\`txt"
+    #     echo "$PARSED_DOC"| grep -v -- "-----" | cut -c 3- # | sed "s#^#  #g"
+    #     echo "\`\`\`"
+    #     echo
+    # )
+}
+
+# show help for a given script
+getbashdoc() {
+
+    local _script=
+    if [ -n "${REPOURL}" ]; then
+        _script="$( basename ${PARSED_SCRIPT} )"
+    fi
     getFunctions "$PARSED_SCRIPT" | while read -r fktline
     do 
 
         parseFunction "$PARSED_SCRIPT" "$fktline"
         echo "${PREFIX_FUNCTION} ${PARSED_FUNCTION}()"
         echo
-        # echo line: $PARSED_LINE
-        test -n "$PARSED_DOC" && (
-            echo "\`\`\`txt"
-            echo "$PARSED_DOC"| grep -v -- "-----" | cut -c 3- # | sed "s#^#  #g"
-            echo "\`\`\`"
-            echo
-        )
-        echo "line: $PARSED_LINE"
+        parseDocBlock
+        if [ -n "${REPOURL}" ]; then
+            echo "[line: $PARSED_LINE](${REPOURL}${_script}#L$PARSED_LINE)"
+        else
+            echo "line: $PARSED_LINE"
+        fi
         echo
     done
 }
@@ -157,7 +196,7 @@ setScript(){
 }
 
 # show help with all cli parameters
-function showHelp(){
+showHelp(){
     _self=$( basename $0 )
     echo "       ________________________________________________________________________
 ______/
@@ -166,8 +205,8 @@ ________________________________________________________________________/ v$APPV
 
     Author: Axel Hahn
     License: GNU GPL 3.0
-    Source:
-    Docs:
+    Source: <https://github.com/axelhahn/bashdoc/>
+    Docs: <https://www.axel-hahn.de/docs/bashdoc/>
 
 
     Parse a bash file, detect its functions and generate a markdown output 
@@ -186,6 +225,9 @@ OPTIONS:
 
     -l [LEVEL]
         level of starting headline; default: 2; valid numbers: 1..5
+    -r [REPOURL]
+        url to the git repository without basename of the file to read; 
+        default: none
     -s [FUNCTION]
         Show help of a single function only; maybe you wanna call -f first
 
@@ -194,7 +236,7 @@ EXAMPLES:
     $_self myscript.bash
         show full markdown help for the given script
 
-    $_self -h 3 -f myscript.bash
+    $_self -l 3 -f myscript.bash
         list functions in alphabetic order starting with headline level 3
 
     $_self -s myfunction myscript.bash
@@ -214,7 +256,7 @@ FUNCTION=
 
 # ----- parse cli params
 
-while getopts ":h :f :p :l: :s:" OPT; do
+while getopts ":h :f :p :l: :r: :s:" OPT; do
   if [ "$OPT" = "-" ]; then   # long option: reformulate OPT and OPTARG
     OPT="${OPTARG%%=*}"       # extract long option name
     OPTARG="${OPTARG#$OPT}"   # extract long option argument (may be empty)
@@ -230,6 +272,8 @@ while getopts ":h :f :p :l: :s:" OPT; do
     f) ACTION="listfunctions";;
     p) SHOWPRIVATE=1 ;;
     l) HLEVEL="${OPTARG}";;
+    r) REPOURL="${OPTARG}";;
+
     s) FUNCTION="${OPTARG}"; ACTION="showfunction";;
   esac
 done
@@ -267,6 +311,8 @@ case $ACTION in
         ;;
     showmarkdown)
         getHeader
+        echo "List of all functions in alphabetic order"
+        echo
         getbashdoc
         ;;
     *)
