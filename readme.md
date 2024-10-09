@@ -3,7 +3,7 @@
 Generate markdown for documentation of all functions in a file.
 
 This is my helper to parse a bash script and read its functions and their doc blocks.
-It generates markdown output to generated an automated documentation.
+It generates markdown output to generate an automated documentation.
 
 **Example:** 
 
