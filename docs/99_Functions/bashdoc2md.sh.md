@@ -2,6 +2,26 @@
 
 List of all functions in alphabetic order
 
+### getbashdoc()
+
+```txt
+Main function: parse given script and show markdown for all functions
+It calls functions for atomar actions
+
+👉🏼 see getFunctions()
+👉🏼 see parseFunction()
+👉🏼 see parseDocblock()
+
+🌐 global  string  PARSED_SCRIPT    nane of the bash script to parse
+🌐 global  string  PARSED_FUNCTION  nane of the function
+🌐 global  string  PARSED_LINE      line number
+🌐 global  string  PARSED_DOC       doc block of the current function
+🌐 global  string  PREFIX_FUNCTION  prefix string for headline with function name
+🌐 global  string  REPOURL          Source code URL
+```
+
+[line: 189](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L189)
+
 ### getFunctions()
 
 ```txt
@@ -30,26 +50,6 @@ return string
 ```
 
 [line: 98](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L98)
-
-### getbashdoc()
-
-```txt
-Main function: parse given script and show markdown for all functions
-It calls functions for atomar actions
-
-👉🏼 see getFunctions()
-👉🏼 see parseFunction()
-👉🏼 see parseDocblock()
-
-🌐 global  string  PARSED_SCRIPT    nane of the bash script to parse
-🌐 global  string  PARSED_FUNCTION  nane of the function
-🌐 global  string  PARSED_LINE      line number
-🌐 global  string  PARSED_DOC       doc block of the current function
-🌐 global  string  PREFIX_FUNCTION  prefix string for headline with function name
-🌐 global  string  REPOURL          Source code URL
-```
-
-[line: 189](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L189)
 
 ### parseDocBlock()
 
