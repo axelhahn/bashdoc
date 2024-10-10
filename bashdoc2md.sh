@@ -70,7 +70,9 @@ _getLongFunctions(){
 
 
 # Find all functions with long and short and create a uniq list 
-# it returns lines [LINE]:[FUNCTION_NAME]
+# it returns lines [LINE]:[FUNCTION_NAME]. It is called by
+#
+# see getbashdoc()
 #
 # global  string  PARSED_SCRIPT    nane of the bash script to parse
 #
@@ -99,7 +101,9 @@ getHeader(){
 }
 
 # Parse a section for a given single function
-# and set
+# and set global variables. It is called by
+#
+# see getbashdoc()
 #
 # global  string  PARSED_FUNCTION  nane of the function
 # global  string  PARSED_LINE      line number
@@ -139,7 +143,9 @@ parseFunction(){
 }
 
 # Parse the doc block of a given function and show description, params, see 
-# and global
+# and global. It is called by
+#
+# see getbashdoc()
 #
 # global  string  PARSED_DOC  doc block of the current function
 parseDocBlock(){
@@ -168,6 +174,11 @@ parseDocBlock(){
 }
 
 # Main function: parse given script and show markdown for all functions
+# It calls functions for atomar actions
+#
+# see getFunctions()
+# see parseFunction()
+# see parseDocblock()
 #
 # global  string  PARSED_SCRIPT    nane of the bash script to parse
 # global  string  PARSED_FUNCTION  nane of the function
@@ -195,6 +206,8 @@ getbashdoc() {
         fi
         echo
     done
+    echo "- - -"
+    echo "Generated with [Bashdoc](https://github.com/axelhahn/bashdoc) v$APPVERSION"
 }
 
 # Set a bash script to parse
