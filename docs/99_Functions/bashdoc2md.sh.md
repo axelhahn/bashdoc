@@ -104,4 +104,4 @@ Show help with all cli parameters
 [line: 234](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L234)
 
 - - -
-Generated with [bashdoc](https://github.com/axelhahn/bashdoc) v0.6
+Generated with [Bashdoc](https://github.com/axelhahn/bashdoc) v0.6
