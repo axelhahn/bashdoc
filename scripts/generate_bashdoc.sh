@@ -16,7 +16,7 @@ echo
 for SOURCE in $SOURCES
 do
     TARGET="$TARGETBASE/$(basename "$SOURCE").md"
-    if [ "$TARGET" -nt "$SOURCE" ]; then
+    if [ "$TARGET" -nt "$SOURCE" ] && [ "$TARGET" -nt "$BASHDOC" ]; then
         echo "SKIP: $TARGET is up to date."
     else
         rm -f "$TARGET"

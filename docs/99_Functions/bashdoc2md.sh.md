@@ -2,75 +2,106 @@
 
 List of all functions in alphabetic order
 
-### getbashdoc()
-
-```txt
-show help for a given script
-```
-
-[line: 158](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L158)
-
 ### getFunctions()
 
 ```txt
-find all functions with long and short and create a uniq list
-it returns lines [LINE]:[FUNCTION_NAME]
+Find all functions with long and short and create a uniq list
+it returns lines [LINE]:[FUNCTION_NAME]. It is called by
+
+👉🏼 see getbashdoc()
+
+🌐 global  string  PARSED_SCRIPT    nane of the bash script to parse
+
 🟩 param  string  scriptname to parse
 return string
 ```
 
-[line: 63](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L63)
+[line: 81](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L81)
 
 ### getHeader()
 
 ```txt
-get markdown header for
+Get markdown header: header in set level and name of script
+
+🌐 global  string  PARSED_SCRIPT    nane of the bash script to parse
+🌐 global  string  PREFIX_SCRIPT    prefix string for headline with script
+
 return string
 ```
 
-[line: 76](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L76)
+[line: 98](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L98)
+
+### getbashdoc()
+
+```txt
+Main function: parse given script and show markdown for all functions
+It calls functions for atomar actions
+
+👉🏼 see getFunctions()
+👉🏼 see parseFunction()
+👉🏼 see parseDocblock()
+
+🌐 global  string  PARSED_SCRIPT    nane of the bash script to parse
+🌐 global  string  PARSED_FUNCTION  nane of the function
+🌐 global  string  PARSED_LINE      line number
+🌐 global  string  PARSED_DOC       doc block of the current function
+🌐 global  string  PREFIX_FUNCTION  prefix string for headline with function name
+🌐 global  string  REPOURL          Source code URL
+```
+
+[line: 189](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L189)
 
 ### parseDocBlock()
 
 ```txt
-parse the doc block of a given function
-🌐 global vars: $PARSED_DOC  string  doc block of the function
+Parse the doc block of a given function and show description, params, see
+and global. It is called by
+
+👉🏼 see getbashdoc()
+
+🌐 global  string  PARSED_DOC  doc block of the current function
 ```
 
-[line: 124](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L124)
+[line: 151](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L151)
 
 ### parseFunction()
 
 ```txt
-TODO:
 Parse a section for a given single function
-and return
-PARSED_FUNCTION  nane of the function
-PARSED_LINE      line number
-PARSED_DOC       doc section
+and set global variables. It is called by
+
+👉🏼 see getbashdoc()
+
+🌐 global  string  PARSED_FUNCTION  nane of the function
+🌐 global  string  PARSED_LINE      line number
+🌐 global  string  PARSED_DOC       doc block of the current function
 
 🟩 param  string   file to parse
 🟩 param  string   starting line with [LINE]:[FUNCTION_NAME]
 ```
 
-[line: 90](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L90)
+[line: 114](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L114)
 
 ### setScript()
 
 ```txt
-set a bash script to parse
-it sets the global variable
-PARSED_SCRIPT  nane of the function
+Set a bash script to parse
+It sets the global variable.
+
+🌐 global string  PARSED_SCRIPT  nane of the function
+
 🟩 param  string  filename of bash script to parse
 ```
 
-[line: 184](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L184)
+[line: 219](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L219)
 
 ### showHelp()
 
 ```txt
-show help with all cli parameters
+Show help with all cli parameters
 ```
 
-[line: 199](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L199)
+[line: 234](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L234)
 
+- - -
+Generated with [bashdoc](https://github.com/axelhahn/bashdoc) v0.6
