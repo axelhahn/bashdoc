@@ -15,13 +15,20 @@ echo
 
 for SOURCE in $SOURCES
 do
+    echo "--- $(basename "$SOURCE")"
     TARGET="$TARGETBASE/$(basename "$SOURCE").md"
     if [ "$TARGET" -nt "$SOURCE" ] && [ "$TARGET" -nt "$BASHDOC" ]; then
         echo "SKIP: $TARGET is up to date."
     else
         rm -f "$TARGET"
         echo "Generating $TARGET ... "
-        $BASHDOC -l 2 -r "$REPO" "$SOURCE" > "$TARGET"
+        if $BASHDOC -l 2 -r "$REPO" "$SOURCE" > "$TARGET.tmp"; then
+            mv "$TARGET.tmp" "$TARGET"
+            echo "OK, generation was successful."
+        else
+            rm -f "$TARGET.tmp"
+            echo "Error: Generation failed."
+        fi
     fi
     ls -l "$SOURCE" "$TARGET"
     echo
