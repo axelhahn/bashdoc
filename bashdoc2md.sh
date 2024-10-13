@@ -4,21 +4,22 @@
 # BASHDOC 2 MARKDOWN
 # Bash parser to find functions and their doc blocks
 #
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # Author: Axel Hahn
 # License: GNU GPL 3.0
 # Source: <https://github.com/axelhahn/bashdoc/>
 # Docs: <https://www.axel-hahn.de/docs/bashdoc/>
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # 2022-09-26  v0.1  axel hahn  first lines
 # 2022-10-14  v0.2  axel hahn  add param support; show a help
 # 2023-08-21  v0.3  axel hahn  finish option "-s"; add option "-p" 
 # 2024-03-28  v0.4  axel hahn  add option -r
 # 2024-10-09  v0.5  axel hahn  add urls to source and docs
 # 2024-10-10  v0.6  axel hahn  handle doc blocks with beginning spaces
+# 2024-10-13  v0.7  axel hahn  extend bashdoc detection
 # ======================================================================
 
-APPVERSION=0.6
+APPVERSION=0.7
 
 PARSED_SCRIPT=
 PARSED_FUNCTION=
@@ -27,6 +28,14 @@ PARSED_DOC=
 
 SHOWPRIVATE=0
 REPOURL=
+
+ICO_GLOBAL="🌐 "
+ICO_OUTPUT="🗨️ "
+ICO_PARAM="🟩 "
+ICO_PARAM_OPT="🔹 "
+ICO_SEE="👉🏼 "
+ICO_TODO="📌 "
+ICO_RETURN="🏁 "
 
 # ----------------------------------------------------------------------
 # INTERNAL FUNCTIONS
@@ -145,27 +154,55 @@ parseFunction(){
 # Parse the doc block of a given function and show description, params, see 
 # and global. It is called by
 #
+# global  ICO_GLOBAL     icon
+# global  ICO_OUTPUT     icon
+# global  ICO_PARAM      icon
+# global  ICO_PARAM_OPT  icon
+# global  ICO_SEE        icon
+# global  ICO_TODO       icon
+# global  ICO_RETURN     icon
+#
 # see getbashdoc()
 #
 # global  string  PARSED_DOC  doc block of the current function
 parseDocBlock(){
     local _icon;
     test -n "$PARSED_DOC" && (
-        # echo -n "<html><pre><code class=\"language-txt bashdoc\">"
+        # echo -n "<html><pre><code class=\"language-txt bashdoc\">"      
         echo '```txt'
-        echo "$PARSED_DOC"| grep -vE -- "[\-\.\=\_\#\*]{5}" | sed "s#^[[:space:]]*\###g" | while read -r line
+        IFS=
+        echo "$PARSED_DOC" \
+            | sed "s#^[[:space:]]*\###g" \
+            | sed "s#^[[:space:]]##g" \
+            | grep -vE -- "[\-\.\=\_\#\*]{5}" \
+            | grep -viE "FUNCTION (BEGIN|END)" \
+            | while read -r line
         do
             _icon=""
+
+            # --- Shell DOC blocks for a function
+            grep -qi "^globals:"          <<< "$line" && _icon="${ICO_GLOBAL}"
+            grep -qi "^arguments:"        <<< "$line" && _icon="${ICO_PARAM}"
+            grep -qi "^outputs:"          <<< "$line" && _icon="${ICO_OUTPUT}"
+            grep -qi "^return:"           <<< "$line" && _icon="${ICO_RETURN}"
+            grep -qi "^returns:"          <<< "$line" && _icon="${ICO_RETURN}"
+
+            # --- PHP DOC like syntax
+            grep -qi "^global[[:space:]]" <<< "$line" && _icon="${ICO_GLOBAL}"
+            grep -qi "^return[[:space:]]" <<< "$line" && _icon="${ICO_RETURN}"
+
+            # params: detect optional parameters
             if grep -qi "^param[[:space:]]" <<< "$line"; then
-                _icon="🟩 "
+                _icon="${ICO_PARAM}"
                 local _descr;
                 _descr=$( awk '{$1=$2=""; print $0 }' <<< "$line" | sed "s#^[[:space:]]*##" )
-                grep -qi "optional:" <<< "$_descr" && _icon="🔹 "
+                grep -qi "optional:" <<< "$_descr" && _icon="${ICO_PARAM_OPT}"
             fi
-            
-            grep -qi "^global[[:space:]]" <<< "$line" && _icon="🌐 "
-            grep -qi "^see " <<< "$line" && _icon="👉🏼 "
 
+            # --- PHP DOC like syntax
+            grep -qi "^see[\ :]"              <<< "$line" && _icon="${ICO_SEE}"
+            grep -qi "^todo[\ :]"             <<< "$line" && _icon="${ICO_TODO}"
+            
             echo "${_icon}${line}"
         done
         echo '```'
