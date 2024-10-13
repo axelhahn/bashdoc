@@ -20,12 +20,12 @@ It calls functions for atomar actions
 🌐 global  string  REPOURL          Source code URL
 ```
 
-[line: 189](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L189)
+[line: 226](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L226)
 
 ### getFunctions()
 
 ```txt
-Find all functions with long and short and create a uniq list
+Find all functions with long and short and create a uniq list 
 it returns lines [LINE]:[FUNCTION_NAME]. It is called by
 
 👉🏼 see getbashdoc()
@@ -33,10 +33,10 @@ it returns lines [LINE]:[FUNCTION_NAME]. It is called by
 🌐 global  string  PARSED_SCRIPT    nane of the bash script to parse
 
 🟩 param  string  scriptname to parse
-return string
+🏁 return string
 ```
 
-[line: 81](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L81)
+[line: 90](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L90)
 
 ### getHeader()
 
@@ -46,23 +46,31 @@ Get markdown header: header in set level and name of script
 🌐 global  string  PARSED_SCRIPT    nane of the bash script to parse
 🌐 global  string  PREFIX_SCRIPT    prefix string for headline with script
 
-return string
+🏁 return string
 ```
 
-[line: 98](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L98)
+[line: 107](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L107)
 
 ### parseDocBlock()
 
 ```txt
-Parse the doc block of a given function and show description, params, see
+Parse the doc block of a given function and show description, params, see 
 and global. It is called by
+
+🌐 global  ICO_GLOBAL     icon
+🌐 global  ICO_OUTPUT     icon
+🌐 global  ICO_PARAM      icon
+🌐 global  ICO_PARAM_OPT  icon
+🌐 global  ICO_SEE        icon
+🌐 global  ICO_TODO       icon
+🌐 global  ICO_RETURN     icon
 
 👉🏼 see getbashdoc()
 
 🌐 global  string  PARSED_DOC  doc block of the current function
 ```
 
-[line: 151](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L151)
+[line: 168](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L168)
 
 ### parseFunction()
 
@@ -80,7 +88,7 @@ and set global variables. It is called by
 🟩 param  string   starting line with [LINE]:[FUNCTION_NAME]
 ```
 
-[line: 114](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L114)
+[line: 123](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L123)
 
 ### setScript()
 
@@ -93,7 +101,7 @@ It sets the global variable.
 🟩 param  string  filename of bash script to parse
 ```
 
-[line: 219](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L219)
+[line: 256](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L256)
 
 ### showHelp()
 
@@ -101,7 +109,7 @@ It sets the global variable.
 Show help with all cli parameters
 ```
 
-[line: 234](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L234)
+[line: 271](https://github.com/axelhahn/bashdoc/blob/main/bashdoc2md.sh#L271)
 
 - - -
-Generated with [Bashdoc](https://github.com/axelhahn/bashdoc) v0.6
+Generated with [Bashdoc](https://github.com/axelhahn/bashdoc) v0.7

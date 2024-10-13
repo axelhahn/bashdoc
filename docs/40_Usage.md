@@ -6,7 +6,7 @@ Call the script `bashdoc2md.sh` with the parameter `-h` to see the help.
        ________________________________________________________________________
 ______/
          GENERATE BASH HELP AS MARKDOWN                                  ______
-________________________________________________________________________/ v0.5
+________________________________________________________________________/ v0.7
 
     Author: Axel Hahn
     License: GNU GPL 3.0
@@ -54,6 +54,6 @@ ________________________________________________________________________
 ## Generate a md file
 
 You can have look to the file `scripts/generate_bashdoc.sh`.
-This generates the file for all functions.
+This generates the markdown file for all functions for a list of given scripts.
 
 Copy it to your project and adapt it.
