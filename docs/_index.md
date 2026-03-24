@@ -1,7 +1,7 @@
 <html>
 <div class="hero">
   <h2>Bashdoc</h2>
-  Generate markdown for documentation of all functions in a file<br>
+  Generate markdown for documentation of all functions in a bash script<br>
 </div>
 </html>
 
