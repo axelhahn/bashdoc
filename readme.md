@@ -27,7 +27,7 @@ Other real life examples for rendered docs you can see here:
 * bash color functions - file [color.class.sh](https://github.com/axelhahn/bash_colorfunctions/blob/main/docs/99_Functions/color.class.sh.md)
 * bash ini parser - file [ini.class.sh](https://github.com/axelhahn/bash_iniparser/blob/main/docs/50_All_functions.md)
 * bash sqlite functions - file [sqlite.class.sh](https://github.com/axelhahn/bash_sqlite/blob/main/docs/50_All_functions.md)
-
+* bash rest api client - file [http.class.sh](https://git-repo.iml.unibe.ch/iml-open-source/bash-rest-api-client/-/blob/master/docs/99_Functions/http.class.sh.md)
 
 ## 📗 Related projects
 
